@@ -13,8 +13,6 @@ struct ProfileView: View {
     var body: some View {
         if let user = viewModel.currentUser {
             ZStack {
-                Color.brandPrimary
-                    .edgesIgnoringSafeArea(.all)
                 VStack {
                     HStack {
                         Text(user.initials)
@@ -94,5 +92,5 @@ struct ProfileView: View {
 }
 
 #Preview {
-    ProfileView()
+    ProfileView().environmentObject(AuthViewModel())
 }

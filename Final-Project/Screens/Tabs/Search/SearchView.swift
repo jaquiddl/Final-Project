@@ -8,8 +8,22 @@
 import SwiftUI
 
 struct SearchView: View {
+    
+    @StateObject private var viewModel = SearchViewModel()
+    
+    
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+
+        VStack {
+            SearchBar(searchTerm: $viewModel.searchTerm)
+        
+            List(viewModel.filteredBooks, id: \.id) { book in
+                SPSearchCell(bookItem: book) // Customize how you display each book
+            }
+            .task { viewModel.books = await viewModel.getBooks() }
+            Spacer()
+        }
+        
     }
 }
 
