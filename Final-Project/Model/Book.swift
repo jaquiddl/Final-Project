@@ -8,17 +8,17 @@
 import Foundation
 
 struct BooksResponse: Codable {
-    let request: [BookItem]
+    let items: [BookItem]
 }
 
 // Define each item in the response
 struct BookItem: Codable, Identifiable {
-    var id: Int
-    let volumeInfo: Book
+    let id: String
+    let volumeInfo: VolumeInfo
 }
 
 // Define the book details
-struct Book: Codable {
+struct VolumeInfo: Codable {
     let title: String
     let authors: [String]?
     let publisher: String?
@@ -44,8 +44,8 @@ struct ImageLinks: Codable {
 
 struct MockData {
     
-    static let mockBook1 = BookItem(id: 01,
-                             volumeInfo: Book(title: "The invisible life of addie la rue",
+    static let mockBook1 = BookItem(id: "01",
+                             volumeInfo: VolumeInfo(title: "The invisible life of addie la rue",
                                               authors: ["V.E SCHWAB"],
                                               publisher: "TOR",
                                               publishedDate: "2020",
@@ -59,8 +59,8 @@ struct MockData {
                                                 thumbnail: "https://example.com/thumbnail.jpg")
                                              ))
     
-    static let mockBook2 = BookItem(id: 02,
-                             volumeInfo: Book(title: "The Swift Programming Language",
+    static let mockBook2 = BookItem(id: "02",
+                             volumeInfo: VolumeInfo(title: "The Swift Programming Language",
                                               authors: ["Apple Inc."],
                                               publisher: "Apple Books",
                                               publishedDate: "2023-01-01",
@@ -74,8 +74,8 @@ struct MockData {
                                                 thumbnail: "https://example.com/thumbnail.jpg")
                                              ))
     
-    static let mockBook3 = BookItem(id: 03,
-                             volumeInfo: Book(title: "The alchemist",
+    static let mockBook3 = BookItem(id: "03",
+                             volumeInfo: VolumeInfo(title: "The alchemist",
                                               authors: ["John Swift."],
                                               publisher: "Rocco Ltd",
                                               publishedDate: "1994",

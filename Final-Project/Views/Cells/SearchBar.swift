@@ -9,9 +9,8 @@ import SwiftUI
 
 struct SearchBar: View {
     
-    @StateObject private var viewModel = SearchViewModel()
-    
     @Binding var searchTerm: String
+
     var body: some View {
         HStack {
             Image(systemName: "sparkle.magnifyingglass")

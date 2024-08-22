@@ -10,11 +10,12 @@ import SwiftUI
 struct Title: View {
     
     var title: LocalizedStringKey
+    var alignment: Alignment
     
     var body: some View {
         Text(title)
             .font(.largeTitle)
             .fontWeight(.semibold)
-            .foregroundColor(.white)
+            .frame(maxWidth: .infinity, alignment: alignment)
     }
 }

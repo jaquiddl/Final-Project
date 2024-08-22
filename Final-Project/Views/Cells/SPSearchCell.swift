@@ -14,7 +14,8 @@ struct SPSearchCell: View {
     var body: some View {
         HStack(spacing: 10) {
             
-            SearchImageCell(url: bookItem.volumeInfo.title)
+            SearchImageCell(url: bookItem.volumeInfo.imageLinks?.smallThumbnail)
+                .frame(width: 60, height: 70)
             TitleAuthorStack(title: bookItem.volumeInfo.title,
                              authors: bookItem.volumeInfo.authors)
             }

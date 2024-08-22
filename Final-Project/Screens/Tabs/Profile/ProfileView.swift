@@ -10,87 +10,60 @@ import SwiftUI
 struct ProfileView: View {
     
     @EnvironmentObject var viewModel: AuthViewModel
+    
     var body: some View {
         if let user = viewModel.currentUser {
-            ZStack {
-                VStack {
-                    HStack {
-                        Text(user.initials)
-                            .font(.title)
-                            .fontWeight(.semibold)
-                            .foregroundColor(.white)
-                            .frame(width: 72, height: 72)
-                            .background(Color(.systemGray3))
-                            .clipShape(Circle())
-                            .padding()
-                        VStack {
-                            Text(user.fullName)
-                                .font(.title2)
-                                .fontWeight(.semibold)
-                                .foregroundColor(.white)
-                                .padding(.bottom, 2)
-                            Text("Current Reading")
-                                .font(.callout)
-                                .foregroundColor(.gray)
-                        }
-                    }
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    
-                    
-                    HStack (spacing: 5){
-                        Text("📖 100 read")
-                            .frame(maxWidth: .infinity)
-                            .font(.callout)
-                            .foregroundColor(.white)
-                        Text("📚 20 to read")
-                            .frame(maxWidth: .infinity)
-                            .font(.callout)
-                            .foregroundColor(.white)
-                        Text("✏️ reviewed")
-                            .frame(maxWidth: .infinity)
-                            .font(.callout)
-                            .foregroundColor(.white)
             
-                    }
-                    .padding(.bottom, 10)
-                    .frame(maxWidth: .infinity, alignment: .trailing)
-                    
-                    HStack (spacing: 10){
-                        Text("0 following")
+            
+            VStack (spacing: 15) {
+                HStack(spacing: 20) {
+                    ProfilePlaceholder(initials: user.initials)
+                    VStack(alignment: .center, spacing: 5) {
+                        Text(user.fullName)
+                            .font(.title2)
+                            .fontWeight(.semibold)
+                            .foregroundColor(.brandPrimary)
+                        Text("Current Reading")
                             .font(.callout)
                             .foregroundColor(.gray)
-                        Text("0 followers")
-                            .font(.callout)
-                            .foregroundColor(.gray)
                     }
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .padding(.leading, 20)
-                    
-                    Title(title: "Settings")
-                    
-                    Button {
-                        viewModel.singOut()
-                    } label: {
-                        Text("Sign out")
-                    }
-                    .font(.title3)
-                    .fontWeight(.semibold)
-                    .frame(width: 260, height: 50)
-                    .foregroundColor(.brandPrimary)
-                    .background(Color(.white))
-                    .cornerRadius(10)
-                    .padding(.bottom, 40)
-                    
-                    
-                    Spacer()
-                    
-                    
                 }
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .padding(.bottom, 25)
+                UserReadingsStack(totalBooks: "📖 \(user.totalBooks) read",
+                                  toRead: "📚 \(user.toRead) to read",
+                                  reviewed: "✏️ \(user.reviewed) reviewed")
+                HStack (spacing: 10){
+                    Text("0 following")
+                        .font(.callout)
+                        .foregroundColor(.gray)
+                    Text("0 followers")
+                        .font(.callout)
+                        .foregroundColor(.gray)
+                }
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .padding(.leading)
+                Divider()
+                       .background(Color.gray)
+                ScrollPage()
+                
+                
+//                taskButton(label: "Sign Out",
+//                           action: viewModel.signOut)
+                Spacer()
             }
+            .padding()
+            
         }
     }
 }
 
+
 #Preview {
-    ProfileView().environmentObject(AuthViewModel())
+    // Mock data for preview
+    let mockUser = User(id: "123", fullName: "Preview User", email: "preview@example.com", totalBooks: 0, toRead: 0, reviewed: 0)
+    let authViewModel = AuthViewModel()
+    authViewModel.currentUser = mockUser
+    
+    return ProfileView().environmentObject(authViewModel)
 }

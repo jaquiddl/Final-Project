@@ -12,6 +12,7 @@ struct WelcomeButton: View {
     var title: LocalizedStringKey
     var BGColor: Color
     var FontColor: Color
+    var borderColor: Color = .brandPrimary
     
    
     
@@ -19,12 +20,19 @@ struct WelcomeButton: View {
         Text(title)
             .font(.title3)
             .fontWeight(.semibold)
+            
             .frame(width: 260, height: 50)
             .foregroundColor(FontColor)
             .background(BGColor)
-            .cornerRadius(10)
+            
+            .overlay(
+            RoundedRectangle(cornerRadius: 20)
+                .stroke(borderColor, lineWidth: 1)
+        )
+        .cornerRadius(20)
         
     }
+    
 }
 
 struct TaskButton: View {
@@ -40,16 +48,18 @@ struct TaskButton: View {
             }
         } label: {
             Text(title)
+                .padding()
         }
         .font(.title3)
         .fontWeight(.semibold)
-        .frame(width: 260, height: 50)
-        .foregroundColor(.brandPrimary)
-        .background(Color(.white))
+        
+        .frame(maxWidth: .infinity, alignment: .center)
+        .multilineTextAlignment(.center)
+        .foregroundColor(.white)
         .disabled(!isEnabled)
-        .opacity(isEnabled ? 1.0 : 0.5)
-        .cornerRadius(10)
-        .padding(.bottom, 40)
+        .background(Color(.brandPrimary))
+        .cornerRadius(30)
+        .padding(EdgeInsets(top: 0, leading: 20, bottom: 30, trailing: 20))
 
     }
 }
@@ -61,14 +71,59 @@ struct CustomNavigationLink<Destination: View>: View {
 
     var body: some View {
         NavigationLink(destination: destination) {
-            HStack {
+            VStack(alignment: .center, spacing: 8) {
                 Text(labelText)
-                    .foregroundColor(.white)
                 Text(boldText)
                     .fontWeight(.bold)
-                    .foregroundColor(.white)
             }
+            .frame(maxWidth: .infinity, alignment: .center)
+            .foregroundColor(.brandPrimary)
         }
+    }
+}
+
+struct taskButton: View {
+    var label: String
+    var action: () -> Void
+    var borderColor: Color = .brandPrimary
+    
+    
+    var body: some View {
+        Button(action:action) {
+            Text(label)
+                .font(.title3)
+                .fontWeight(.semibold)
+                .frame(width: 260, height: 50)
+                .foregroundColor(.brandPrimary)
+                .background(Color(.white))
+                .overlay(
+                    RoundedRectangle(cornerRadius: 20)
+                        .stroke(borderColor, lineWidth: 1)
+                )
+        }
+        .padding(.bottom, 40)
+    }
+    
+}
+
+struct newTaskButton: View {
+    var action: () -> Void
+    var label: LocalizedStringKey
+    var BGColor: Color
+    var FontColor: Color
+    
+    var body: some View {
+        Button {
+            action()
+        } label: {
+            Text(label)
+        }
+        .font(.title3)
+        .fontWeight(.semibold)
+        .frame(width: 260, height: 50)
+        .foregroundColor(FontColor)
+        .background(BGColor)
+        .cornerRadius(10)
     }
 }
 

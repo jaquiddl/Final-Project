@@ -15,26 +15,39 @@ struct InputView: View {
     var isSecureField = false
 
     var body: some View {
-        VStack (alignment: .leading, spacing: 12) {
+        VStack (alignment: .leading, spacing: 20) {
             Text(title)
-                .foregroundColor(.white)
+                .foregroundColor(.brandPrimary)
                 .fontWeight(.semibold)
                 .font(.system(size: 18))
+                .opacity(0.5)
             if isSecureField {
                 SecureField("", text: $text)
-                    .padding(EdgeInsets(top: 10, leading: 10, bottom: 10, trailing: 10))
-                    .frame(width: 310)
-                    .background(Color.white) // Set background color
-                    .cornerRadius(10) // Optional: Round the corners
-                    .padding(.bottom)
+                    .disableAutocorrection(true)
+                    .autocapitalization(.none)
+                    .padding(.bottom, 10)
+                    .overlay(
+                        Rectangle()
+                            .frame( height: 1)
+                            .opacity(0.5)
+                            .foregroundColor(.brandPrimary),
+                        alignment: .bottom
+                
+                    )
             } else {
                 TextField("", text: $text)
-                    .padding(EdgeInsets(top: 10, leading: 10, bottom: 10, trailing: 10))
-                    .frame(width: 310)
-                    .background(Color.white) // Set background color
-                    .cornerRadius(10) // Optional: Round the corners
-                    .padding(.bottom)
+                    .disableAutocorrection(true)
+                    .padding(.bottom, 10)
+                    .overlay(
+                        Rectangle()
+                            .frame( height: 1)
+                            .opacity(0.5)
+                            .foregroundColor(.brandPrimary),
+                        alignment: .bottom
+                    )
             }
         }
+        .padding(EdgeInsets(top: 0, leading: 10, bottom: 0, trailing: 10))
+        
     }
 }

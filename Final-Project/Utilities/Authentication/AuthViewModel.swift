@@ -7,6 +7,7 @@
 
 import SwiftUI
 import Firebase
+import FirebaseAuth
 import FirebaseFirestoreSwift
 
 protocol AuthenticationFormProtocol {
@@ -16,11 +17,22 @@ protocol AuthenticationFormProtocol {
 @MainActor
 class AuthViewModel: ObservableObject {
     
-    @Published var userSession: FirebaseAuth.User?
-    @Published var currentUser: User?
+    @AppStorage("isWelcomeScreenOver") var isWelcomeScreenOver = false
+    
+    @Published var userSession: FirebaseAuth.User? {
+        didSet {
+            print("DEBUG: userSession updated - \(String(describing: userSession))")
+        }
+    }
+    @Published var currentUser: User? {
+        didSet {
+            print("DEBUG: currentUser updated - \(String(describing: currentUser))")
+        }
+    }
+    @Published var isLoginSuccessful: Bool = true
     
     init() {
-        self.userSession = Auth.auth().currentUser
+        self.userSession = Auth.auth().currentUser 
         Task {
             await fetchUser()
         }
@@ -31,8 +43,11 @@ class AuthViewModel: ObservableObject {
             let result = try await Auth.auth().signIn(withEmail: email, password: password)
             self.userSession = result.user
             await fetchUser()
+            self.isWelcomeScreenOver = true
         } catch {
-            print("DEBUG: Failed to log in with error \(error.localizedDescription)")
+            self.isLoginSuccessful = false
+            print(self.isLoginSuccessful)
+            throw BookError.invalidData
         }
     }
     
@@ -40,16 +55,17 @@ class AuthViewModel: ObservableObject {
         do {
             let result = try await Auth.auth().createUser(withEmail: email, password: password)
             self.userSession = result.user
-            let user = User(id: result.user.uid, fullName: fullname, email: email)
+            let user = User(id: result.user.uid, fullName: fullname, email: email, totalBooks: 0, toRead: 0, reviewed: 0)
             let encodedUser = try Firestore.Encoder().encode(user)
             try await Firestore.firestore().collection("users").document(user.id).setData(encodedUser)
             await fetchUser()
+            self.isWelcomeScreenOver = true
         } catch {
             print("DEBUG: failed to create user")
             
         }
     }
-    func singOut() {
+    func signOut() {
         do {
             try Auth.auth().signOut() // signs out user on backend
             self.userSession = nil // wipes out user session and takes us back to login screen

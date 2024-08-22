@@ -7,6 +7,17 @@
 
 import SwiftUI
 
+//final class ImageLoader: ObservableObject {
+//    
+//    @Published var image: Image? = nil
+//    
+//    func load(fromURLString urlString: String) {
+//
+//    }
+//}
+
+import SwiftUI
+
 struct SearchImageCell: View {
     var url: String?
     
@@ -15,27 +26,20 @@ struct SearchImageCell: View {
             AsyncImage(url: url) { phase in
                 switch phase {
                 case .empty:
-                    Rectangle()
-                        .foregroundColor(.red)
-                        .frame(width: 60, height: 70)
-                    
-                case .success(let returnedImage):
-                    returnedImage
-                        .resizable()
-                        .aspectRatio(contentMode: .fit)
-                        .frame(width: 60, height: 70)
-                    
+                    Color.blue // Placeholder color while loading
+                case .success(let image):
+                    image.resizable() // Ensure the image is resizable
                 case .failure:
-                    Rectangle()
-                        .foregroundColor(.black)
-                        .frame(width: 60, height: 70)
-                    
-                default:
-                    Image(systemName: "questionmark")
-                        .font(.headline)
-                        .frame(width: 60, height: 70)
+                    Color.red // Error color
+                @unknown default:
+                    Color.gray // Fallback color for any other unknown states
                 }
             }
+            .onAppear {
+                print("Loading image from URL: \(url)")
+            }
+        } else {
+            Color.clear // Handle case where URL is nil
         }
     }
 }

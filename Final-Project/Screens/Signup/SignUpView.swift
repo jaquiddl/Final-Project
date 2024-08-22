@@ -9,56 +9,44 @@ import SwiftUI
 
 struct SignUpView: View {
     
-
     @Environment(\.dismiss) var dismiss
     @EnvironmentObject var authViewModel: AuthViewModel
     @StateObject private var viewModel = SignUpViewModel()
     
     var body: some View {
-        
-        
-        ZStack {
-            Color.brandPrimary
-                .edgesIgnoringSafeArea(.all)
-            VStack {
-                Spacer()
-                Title(title: "Sign up")
-                    .padding(.bottom, 30)
+        VStack (alignment: .center, spacing: 35) {
+            Title(title: "Let's get started", alignment: .leading)
+                .padding(.bottom, 20)
+                .padding(.leading, 50)
+            //            taskButton(
+            //                label: "Continue with google",
+            //                action: )
+            //            taskButton(
+            //                label: "Continue with apple",
+            //                action: )
+            //            taskButton(
+            //                label: "Continue with Email",
+            //                action: )
+            NavigationLink (destination: PasswordView()) {
+                WelcomeButton(title: "Continue with Email",
+                              BGColor: .brandPrimary,
+                              FontColor: .white,
+                              borderColor:.clear)
+            }
 
-                Spacer()
-                    
-                InputView(title: "Full Name",
-                          text: $viewModel.fullName)
-                        .autocapitalization(.none)
-                InputView(title: "Email",
-                          text: $viewModel.email)
-                        .autocapitalization(.none)
-                InputView(title: "Password",
-                          text: $viewModel.password,
-                          isSecureField: true)
-                        .autocapitalization(.none)
-                InputView(title: "Confirm Password",
-                          text: $viewModel.passwordConfirmation,
-                          isSecureField: true)
-                        .autocapitalization(.none)
-                Spacer()
-                TaskButton(
-                    title: "Sign up",
-                    action: {
-                        try await authViewModel.createUser(withEmail: viewModel.email,
-                                                       password: viewModel.password,
-                                                           fullname: viewModel.fullName)
-                    },
-                    isEnabled: viewModel.formIsValid
-                )
-
-                CustomNavigationLink(destination: LoginView(),
-                                     labelText: "Already have an account?",
-                                     boldText: "Log in")            }
-            .navigationBarBackButtonHidden(true)
+            CustomNavigationLink(destination: LoginView(),
+                                 labelText: "Already have an account?",
+                                 boldText: "Log in")
         }
+        .navigationBarBackButtonHidden(true)
+        .padding(EdgeInsets(top: 0, leading: 20, bottom: 0, trailing: 20))
     }
+        
 }
+    
+
+
+    
 
 #Preview {
     SignUpView()

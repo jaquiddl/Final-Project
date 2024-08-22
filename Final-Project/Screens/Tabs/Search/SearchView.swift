@@ -13,19 +13,28 @@ struct SearchView: View {
     
     
     var body: some View {
-
-        VStack {
-            SearchBar(searchTerm: $viewModel.searchTerm)
         
-            List(viewModel.filteredBooks, id: \.id) { book in
-                SPSearchCell(bookItem: book) // Customize how you display each book
+        NavigationStack {
+            VStack {
+                SearchBar(searchTerm: $viewModel.searchTerm)
+                    .onChange(of: viewModel.searchTerm) {
+                        viewModel.getBooksWithDelay(query: viewModel.searchTerm, delay: 2)
+                    }
+                List(viewModel.filteredBooks, id: \.id) { book in
+                    NavigationLink(destination: BookPreView(bookItem: book,
+                                                         isShowingDetail: $viewModel.isSelected)) {
+                        SPSearchCell(bookItem: book) // Customize how you display each book
+                    }
+                }
+                .padding(.bottom)
             }
-            .task { viewModel.books = await viewModel.getBooks() }
-            Spacer()
+            .task { viewModel.getBooksWithDelay(query: viewModel.searchTerm, delay: 2) }
+            
         }
-        
     }
 }
+
+
 
 #Preview {
     SearchView()

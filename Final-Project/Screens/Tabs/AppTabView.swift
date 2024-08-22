@@ -10,11 +10,12 @@ import SwiftUI
 struct AppTabView: View {
     
     @EnvironmentObject var viewModel: AuthViewModel
+    @AppStorage("isWelcomeScreenOver") var isWelcomeScreenOver = false
     
     var body: some View {
-        NavigationStack {
-            Group {
-                if viewModel.userSession != nil {
+        if isWelcomeScreenOver {
+            if let _ = viewModel.userSession {
+                if let _ = viewModel.currentUser  {
                     TabView {
                         HomeView()
                             .tabItem {
@@ -39,14 +40,19 @@ struct AppTabView: View {
                     }
                     .tint(.brandPrimary)
                 } else {
-                    LoginView()
+                    Text("Loading user data...")
                 }
+                
+            } else {
+                LoginView()
             }
-            
+        } else {
+            WelcomeView()
         }
         
         
     }
+    
 }
 
 #Preview {
