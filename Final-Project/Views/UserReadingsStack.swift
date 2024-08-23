@@ -8,21 +8,33 @@
 import SwiftUI
 
 struct UserReadingsStack: View {
-    var totalBooks: String
+    var read: String
     var toRead: String
     var reviewed: String
     
     var body: some View {
-        HStack (spacing: 20){
-            Text(totalBooks)
+            HStack (spacing: 20){
+                NavigationLink(destination: ReadView()) {
+                    
+                    Text(read)
+                    
+                }
+                NavigationLink(destination: ToReadView()) {
+                    
+                    Text(toRead)
+                    
+                }
                 
-            Text(toRead)
                 
-            Text(reviewed)
-        }
-        .frame(maxWidth: .infinity, alignment: .center)
-        .font(.callout)
-        .foregroundColor(.brandPrimary)
-        
+                
+                Button(action: {
+                    // Action when the "reviewed" item is tapped
+                    print("Reviewed tapped: \(reviewed)")
+                }) {
+                    Text(reviewed)
+                }        }
+            .frame(maxWidth: .infinity, alignment: .center)
+            .font(.callout)
+            .foregroundColor(.brandPrimary)
     }
 }

@@ -26,11 +26,11 @@ struct SearchImageCell: View {
             AsyncImage(url: url) { phase in
                 switch phase {
                 case .empty:
-                    Color.blue // Placeholder color while loading
+                    Color.secondary // Placeholder color while loading
                 case .success(let image):
                     image.resizable() // Ensure the image is resizable
                 case .failure:
-                    Color.red // Error color
+                    Color.gray // Error color
                 @unknown default:
                     Color.gray // Fallback color for any other unknown states
                 }

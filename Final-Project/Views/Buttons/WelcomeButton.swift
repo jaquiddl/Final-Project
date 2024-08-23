@@ -86,15 +86,15 @@ struct taskButton: View {
     var label: String
     var action: () -> Void
     var borderColor: Color = .brandPrimary
+    var fontStyle: Color = .brandPrimary
     
     
     var body: some View {
         Button(action:action) {
             Text(label)
                 .font(.title3)
-                .fontWeight(.semibold)
                 .frame(width: 260, height: 50)
-                .foregroundColor(.brandPrimary)
+                .foregroundStyle(fontStyle)
                 .background(Color(.white))
                 .overlay(
                     RoundedRectangle(cornerRadius: 20)

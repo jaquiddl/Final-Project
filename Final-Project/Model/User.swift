@@ -7,13 +7,31 @@
 
 import Foundation
 
+
+struct BookDetails: Codable {
+    let category: String
+    let timestamp: Date?
+    let order: Int?
+}
+
+
 struct User: Identifiable, Codable {
     let id: String
     let fullName: String
     let email: String
-    let totalBooks: Int
-    let toRead: Int
-    let reviewed: Int
+    let booksDictionary: [String: BookDetails]
+    let reviewed: [String]
+
+    
+//    var readBooks: [String] {
+//        return booksDictionary.filter { $0.value == "read" }.map { $0.key }
+//    }
+//    var readingBooks: [String] {
+//        return booksDictionary.filter {$0.value == "reading" }.map {$0.key}
+//    }
+//    var toReadBooks: [String] {
+//        return booksDictionary.filter { $0.value == "toRead" }.map { $0.key }
+//    }
 
     
     
@@ -29,5 +47,12 @@ struct User: Identifiable, Codable {
 }
 
 extension User {
-    static var Mock_user = User(id: NSUUID().uuidString, fullName: "Jacqueline Diaz De Leon", email: "test@gmail.com", totalBooks: 0, toRead: 0, reviewed: 0)
+    static var bookDetails = BookDetails(category: "Fiction", timestamp: Date(), order: 1)
+    static var Mock_user = User(
+        id: NSUUID().uuidString,
+        fullName: "Jacqueline Diaz De Leon",
+        email: "test@gmail.com",
+        booksDictionary: ["BookID1": bookDetails], // Use the instance of `bookDetails` here
+        reviewed: []
+    )
 }

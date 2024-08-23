@@ -11,13 +11,15 @@ import SwiftUI
 struct ProfilePlaceholder: View {
     
     var initials: String
+    var dimension: CGFloat
+    var font: Font
     
     var body: some View {
         Text(initials)
-            .font(.title)
+            .font(font)
             .fontWeight(.semibold)
             .foregroundColor(Color(.brandPrimary))
-            .frame(width: 72, height: 72)
+            .frame(width: dimension, height: dimension)
             .background(Color(.systemGray3))
             .clipShape(Circle())
     }    

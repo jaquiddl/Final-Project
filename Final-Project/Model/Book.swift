@@ -45,7 +45,7 @@ struct ImageLinks: Codable {
 struct MockData {
     
     static let mockBook1 = BookItem(id: "01",
-                             volumeInfo: VolumeInfo(title: "The invisible life of addie la rue",
+                             volumeInfo: VolumeInfo(title: "The invisible life of addie la rueeeeeeeeee",
                                               authors: ["V.E SCHWAB"],
                                               publisher: "TOR",
                                               publishedDate: "2020",

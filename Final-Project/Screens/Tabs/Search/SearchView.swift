@@ -10,6 +10,7 @@ import SwiftUI
 struct SearchView: View {
     
     @StateObject private var viewModel = SearchViewModel()
+    @State private var isShowingDetails = false
     
     
     var body: some View {
@@ -21,17 +22,29 @@ struct SearchView: View {
                         viewModel.getBooksWithDelay(query: viewModel.searchTerm, delay: 2)
                     }
                 List(viewModel.filteredBooks, id: \.id) { book in
-                    NavigationLink(destination: BookPreView(bookItem: book,
-                                                         isShowingDetail: $viewModel.isSelected)) {
-                        SPSearchCell(bookItem: book) // Customize how you display each book
-                    }
+                    //                    NavigationLink(destination: BookPreView(bookItem: book,
+                    //                                                         isShowingDetail: $viewModel.isSelected))
+                    SPSearchCell(bookItem: book)
+                        .onTapGesture {
+                            viewModel.selectedBook = book
+                            isShowingDetails = true
+                        }
                 }
                 .padding(.bottom)
             }
-            .task { viewModel.getBooksWithDelay(query: viewModel.searchTerm, delay: 2) }
+            .task { viewModel.getBooksWithDelay(query: viewModel.searchTerm, delay: 1) }
+            
+            .sheet(item: $viewModel.selectedBook) { selectedItem in
+                BookPreView(bookItem: selectedItem)
+                    .presentationDetents([.large])
+                    .presentationDragIndicator(.visible)
+                
+            }
             
         }
+        
     }
+    
 }
 
 

@@ -10,83 +10,106 @@ import SwiftUI
 struct BookPreView: View {
     
     let bookItem: BookItem
-    @Binding var isShowingDetail: Bool
+    let screenWidth = UIScreen.main.bounds.width
+    @State var selectedCategory: String = "Add book"
+    
     
     var body: some View {
         ScrollView {
-            VStack {
-                ZStack {
-                    Color.indigo
-                        .cornerRadius(30)
-                        .frame(height: UIScreen.main.bounds.height * 0.6)
-                    VStack (spacing: 15){
-                        SearchImageCell(url: bookItem.volumeInfo.imageLinks?.smallThumbnail)
-                            .frame(width: 170, height: 240)
-                            .padding()
-                        Text(bookItem.volumeInfo.title)
-                            .font(.title2)
-                            .fontWeight(.semibold)
-                        Text(bookItem.volumeInfo.authors?.joined(separator: ", ") ?? "")
-                        Text(bookItem.volumeInfo.publisher ?? "")
+            
+            VStack (spacing: 4){
+                SearchImageCell(url: bookItem.volumeInfo.imageLinks?.smallThumbnail)
+                    .frame(width: 170, height: 240)
+                    .padding()
+                Text(bookItem.volumeInfo.title)
+                    .frame(width: screenWidth * 0.80, alignment: .center)
+                    .lineLimit(nil) // Allow the text to wrap into multiple lines
+                    .fixedSize(horizontal: false, vertical: true)
+                    .font(.title2)
+                    .multilineTextAlignment(.center)
+                    .fontWeight(.semibold)
+                Text(bookItem.volumeInfo.authors?.joined(separator: ", ") ?? "")
+                    .fontWeight(.semibold)
+                    .foregroundStyle(Color.secondary)
+                    .padding(.bottom, 30)
+                VStack {
+                    Menu {
+                        
+                        Button("To read") {
+                            updateCategory(to: "toRead")
+                        }
+                        Button("Reading") {
+                            updateCategory(to: "reading")
+                        }
+                        Button("Read") {
+                            updateCategory(to: "read")
+                        }
+                        
+                    } label: {
+                        
+                        Label(mapCategoryToLabel(selectedCategory), systemImage: categoryIcon(for: selectedCategory))
                     }
+                    .padding()
+                    .frame(width: 200)
+                    .background(Color.gray.opacity(0.1))
+                    .foregroundStyle(Color.brandPrimary)
+                    .cornerRadius(20)
                 }
-                Spacer()
-                
-                VStack(alignment: .leading,spacing: 10) {
-                    Text("Description")
-                        .font(.title3)
-                        .fontWeight(.semibold)
-                    Text(bookItem.volumeInfo.description ?? "")
-                    Spacer()
+                .onAppear {
+                    fetchCategoryForBook()
                 }
-                .frame(height: 300)
-                .padding(.top)
-                .padding(.leading)
             }
+            Divider()
+                .padding()
+            Text("Description")
+                .font(.title3)
+                .fontWeight(.semibold)
+                .padding(.bottom, 8)
+            Text(bookItem.volumeInfo.description ?? "")
+                .padding(.horizontal)
+                .font(.body)
+                .foregroundStyle(Color.secondary)
         }
-        .ignoresSafeArea()
     }
+    private func updateCategory(to category: String) {
+        selectedCategory = category
+        BooksManager.shared.updateBookDictionary(to: category, bookID: bookItem.id)
+    }
+    
+    // Fetch the category from Firestore when the view appears
+    private func fetchCategoryForBook() {
+        BooksManager.shared.fetchBookCategory(bookID: bookItem.id) { category in
+            selectedCategory = category ?? "Add book"
+        }
+    }
+    private func mapCategoryToLabel(_ category: String) -> String {
+        switch category {
+        case "toRead":
+            return "To read"
+        case "reading":
+            return "Reading"
+        case "read":
+            return "Read"
+        default:
+            return "Add book"
+        }
+    }
+    private func categoryIcon(for category: String) -> String {
+        switch category {
+        case "toRead":
+            return "arrow.right.circle"
+        case "reading":
+            return "book"
+        case "read":
+            return "checkmark"
+        default:
+            return "chevron.down"
+        }
+    }
+    
 }
 
 #Preview {
-    BookPreView(bookItem: MockData.mockBook1, isShowingDetail: .constant(true))
-}
-struct BookDetail: View {
-    
-    let title: String
-    let value: String
-    
-    var body: some View {
-        
-        VStack(spacing: 8) {
-            Text(title)
-                .foregroundColor(.secondary)
-                .fontWeight(.semibold)
-                .font(.headline)
-            
-            Text(value)
-                .fontWeight(.bold)
-            
-        }
-    }
+    BookPreView(bookItem: MockData.mockBook1)
 }
 
-extension View {
-    func cornerRadius(_ radius: CGFloat, corners: UIRectCorner) -> some View {
-        clipShape(RoundedCorner(radius: radius, corners: corners))
-    }
-}
-
-struct RoundedCorner: Shape {
-    var radius: CGFloat = .infinity
-    var corners: UIRectCorner = .allCorners
-    
-    func path(in rect: CGRect) -> Path {
-        let path = UIBezierPath(
-            roundedRect: rect,
-            byRoundingCorners: corners,
-            cornerRadii: CGSize(width: radius, height: radius)
-        )
-        return Path(path.cgPath)
-    }
-}

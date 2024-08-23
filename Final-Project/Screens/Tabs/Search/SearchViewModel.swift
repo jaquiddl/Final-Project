@@ -13,7 +13,7 @@ final class SearchViewModel: ObservableObject {
     @Published var alertItem: AlertItem?
     @Published var searchTerm: String = ""
     @Published var selectedBook: BookItem?
-    @Published var isSelected = false
+    
     private var delayTask: DispatchWorkItem?
   
     func getBooksWithDelay(query: String, delay: TimeInterval) {
@@ -28,7 +28,7 @@ final class SearchViewModel: ObservableObject {
                     let fetchedBooks = try await NetworkManager.shared.getBooks(query: query)
                     DispatchQueue.main.async {
                         self.books = fetchedBooks
-                        print(self.books)
+                       
                     }
                 } catch {
                     DispatchQueue.main.async {
