@@ -16,6 +16,14 @@ class BooksManager {
     
     private init() {}
     
+    private func getUserRef() -> DocumentReference? {
+        guard let userID = Auth.auth().currentUser?.uid else {
+            print("No authenticated user found")
+            return nil
+        }
+        return db.collection("users").document(userID)
+    }
+    
     func moveBook(from oldCategory: String, to newCategory: String, bookID: String) {
         guard let userID = Auth.auth().currentUser?.uid else {
             print("No authenticated user found")
@@ -62,15 +70,14 @@ class BooksManager {
                     print("Book category updated successfully")
                 }
             }
+            if newCategory == "reading" {
+                self?.updateReadingProgress(for: bookID, currentPage: 0)
+            }
         }
     }
     
     func updateBookDictionary (to category: String, bookID: String) {
-        guard let userID = Auth.auth().currentUser?.uid else {
-            print("No authenticated user found")
-            return
-        }
-        let userRef = db.collection("users").document(userID)
+        guard let userRef = getUserRef() else { return }
         
         userRef.getDocument { document, error in
             if let error  = error {
@@ -101,26 +108,25 @@ class BooksManager {
                         "timestamp": bookDetails.timestamp as Any,
                         "order": bookDetails.order as Any
                     ]
-                ]) { error in
+                ]){ error in
                     if let error = error {
                         print("Error updating book category: \(error.localizedDescription)")
                     } else {
                         print("Book category updated successfully ")
                     }
                 }
+                if category == "reading" {
+                    print("u")
+                    self.updateReadingProgress(for: bookID, currentPage: 0)
+                }
+                
             }
         }
     }
     
     
     func fetchBookCategory(bookID: String, completion: @escaping (String?) -> Void) {
-        guard let userID = Auth.auth().currentUser?.uid else {
-            print("No authenticated user found")
-            completion(nil)
-            return
-        }
-        
-        let userRef = db.collection("users").document(userID)
+        guard let userRef = getUserRef() else { return }
         
         userRef.getDocument { document, error in
             
@@ -181,8 +187,6 @@ class BooksManager {
         }
     }
     
-    
-    
     func fetchBooksWithTimestamps(from category: String, completion: @escaping ([String: Date]) -> Void) {
         guard let userID = Auth.auth().currentUser?.uid else {
             print("No authenticated user found")
@@ -215,6 +219,89 @@ class BooksManager {
         }
     }
     
+    func updateReadingProgress(for bookID: String, currentPage: Int) {
+        guard let userRef = getUserRef() else { return }
+        userRef.getDocument() { document, error in
+            if let error = error {
+                print("Error fetching user document ")
+                return
+            }
+            guard let document = document, document.exists, let data = document.data() else {
+                print("User document does not exist")
+                return
+            }
+            if let readingProgress = data["readingProgress"] as? [String : [String : Any]],
+               let readingProgressData = readingProgress[bookID] {
+                
+                let readingData = ReadingData(currentPage: currentPage, lastUpdate: Date())
+        
+                userRef.updateData([
+                    "readingProgress.\(bookID)": [
+                        "currentPage": readingData.currentPage,
+                        "lastUpdate":readingData.lastUpdate
+                    ]
+                ]) { error in
+                    if let error = error {
+                        print("Error updating reading process: \(error.localizedDescription)")
+                    } else {
+                        print("Reading progress updated succesfully")
+                    }
+                }
+                
+            } else {
+                let readingData = ReadingData(currentPage: currentPage, lastUpdate: Date())
+                userRef.updateData([
+                    "readingProgress.\(bookID)": [
+                        "currentPage": readingData.currentPage,
+                        "lastUpdate":readingData.lastUpdate
+                    ]
+                ]) { error in
+                    if let error = error {
+                        print("Error updating reading process: \(error.localizedDescription)")
+                    } else {
+                        print("Reading progress updated succesfully")
+                    }
+                }
+            }
+        }
+        
+    }
     
+    func fetchReadingProgress(completion: @escaping ([String: ReadingData]?) -> Void) {
+        guard let userRef = getUserRef() else {
+            completion(nil)
+            return
+        }
+        
+        userRef.getDocument() { document, error in
+            if let document = document, document.exists {
+                let data = document.data()
+                
+                if let readingProgress = data?["readingProgress"] as? [String: [String: Any ]] {
+                    var readingBooks: [String: ReadingData] = [:]
+                    
+                    for(bookID, progressData) in readingProgress {
+                        if let currentPage = progressData["currentPage"] as? Int,
+                           let lastUpdate = progressData["lastUpdate"] as? Timestamp {
+                            
+                            let readingData = ReadingData(
+                                currentPage: currentPage,
+                                lastUpdate: lastUpdate.dateValue())
+                            readingBooks[bookID] = readingData
+                        }
+                    }
+                    completion(readingBooks)
+                    
+                    
+                } else {
+                    completion(nil)
+                }
+            } else {
+                completion(nil)
+            }
+            
+        }
+        
+    }
     
 }

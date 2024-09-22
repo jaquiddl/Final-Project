@@ -16,11 +16,17 @@ struct SPSearchCell: View {
             
             SearchImageCell(url: bookItem.volumeInfo.imageLinks?.smallThumbnail)
                 .frame(width: 60, height: 70)
-            TitleAuthorStack(title: bookItem.volumeInfo.title,
-                             authors: bookItem.volumeInfo.authors)
+            VStack (alignment: .leading, spacing: 5){
+                Text(bookItem.volumeInfo.title)
+                    .fontWeight(.semibold)
+                if let authors = bookItem.volumeInfo.authors, !authors.isEmpty {
+                    let authorNames = authors.joined(separator: ", ")
+                    Text("by \(authorNames)")
+                }
             }
         }
     }
+}
     
 
 

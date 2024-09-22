@@ -12,6 +12,11 @@ struct ReadView: View {
     
     var body: some View {
         VStack {
+            Text ("Read Books ")
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .font(.title)
+                .fontWeight(.semibold)
+                .padding()
             List(viewModel.readBooks, id: \.id) { book in
                 
                 SPSearchCell(bookItem: book) // Customize how you display each book

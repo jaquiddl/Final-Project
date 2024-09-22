@@ -85,10 +85,14 @@ struct ProfileView: View {
                                     .font(.title2)
                                     .fontWeight(.semibold)
                                     .foregroundColor(.brandPrimary)
+                                NavigationLink(destination: ReadingView()) {
+                                    
+                                    Text(viewModel.currentReading != nil ? "Now reading: \(viewModel.currentReading!)" : "No current readings")
+                                        .font(.callout)
+                                        .foregroundColor(.gray)
+                                    
+                                }
                                 
-                                Text(viewModel.currentReading != nil ? "Now reading: \(viewModel.currentReading!)" : "No current readings")
-                                    .font(.callout)
-                                    .foregroundColor(.gray)
                             }
                                      
                         }
@@ -129,9 +133,13 @@ struct ProfileView: View {
 #Preview {
     // Mock data for preview
     let bookDetails = BookDetails(category: "Fiction", timestamp: Date(), order: 1)
-    let mockUser = User(id: "123", fullName: "Preview User", email: "preview@example.com", booksDictionary: ["BookID1": bookDetails], reviewed: ["bookID1", "BookID2"])
+    let readingData = ReadingData(currentPage: 1, lastUpdate: Date())
+    let mockUser = User(id: "123", fullName: "Preview User", email: "preview@example.com", booksDictionary: ["BookID1": bookDetails], readingProgress: ["BookID1": readingData], reviewed: ["bookID1", "BookID2"])
+
+    // Initialize AuthViewModel with the mock user
     let authViewModel = AuthViewModel()
     authViewModel.currentUser = mockUser
     
-    return ProfileView().environmentObject(authViewModel)
+    return ProfileView()
+        .environmentObject(authViewModel)
 }

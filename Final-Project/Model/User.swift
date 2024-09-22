@@ -13,6 +13,10 @@ struct BookDetails: Codable {
     let timestamp: Date?
     let order: Int?
 }
+struct ReadingData: Codable {
+    let currentPage: Int
+    let lastUpdate: Date
+}
 
 
 struct User: Identifiable, Codable {
@@ -20,6 +24,7 @@ struct User: Identifiable, Codable {
     let fullName: String
     let email: String
     let booksDictionary: [String: BookDetails]
+    let readingProgress: [String: ReadingData]
     let reviewed: [String]
 
     
@@ -32,7 +37,7 @@ struct User: Identifiable, Codable {
 //    var toReadBooks: [String] {
 //        return booksDictionary.filter { $0.value == "toRead" }.map { $0.key }
 //    }
-
+ 
     
     
     var initials: String {
@@ -48,11 +53,13 @@ struct User: Identifiable, Codable {
 
 extension User {
     static var bookDetails = BookDetails(category: "Fiction", timestamp: Date(), order: 1)
+    static var readingData = ReadingData(currentPage: 20, lastUpdate: Date())
     static var Mock_user = User(
         id: NSUUID().uuidString,
         fullName: "Jacqueline Diaz De Leon",
         email: "test@gmail.com",
-        booksDictionary: ["BookID1": bookDetails], // Use the instance of `bookDetails` here
+        booksDictionary: ["BookID1": bookDetails],
+        readingProgress: ["BookID1": readingData], // Use the instance of `bookDetails` here
         reviewed: []
     )
 }

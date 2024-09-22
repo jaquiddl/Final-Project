@@ -13,6 +13,10 @@ final class SearchViewModel: ObservableObject {
     @Published var alertItem: AlertItem?
     @Published var searchTerm: String = ""
     @Published var selectedBook: BookItem?
+    @Published var isShowingDetails: Bool = false
+    @Published var readingProgress: [String: ReadingData] = [:]
+    @Published var progress: String = ""
+    @Published var currentPage: Double = 0
     
     private var delayTask: DispatchWorkItem?
   
@@ -54,7 +58,22 @@ final class SearchViewModel: ObservableObject {
             DispatchQueue.main.asyncAfter(deadline: .now() + delay, execute: delayTask)
         }
     }
-            
+    func updateProgress() {
+        // Safely unwrap selectedBook?.id
+        if let bookId = selectedBook?.id {
+            // Try to convert progress (String) to Int
+            if let currentPage = Int(progress) {
+                // Pass the converted Int to updateReadingProgress
+                BooksManager.shared.updateReadingProgress(for: bookId, currentPage: currentPage)
+            } else {
+                // Handle the case where the conversion fails (e.g., invalid input)
+                print("Invalid progress value: \(progress)")
+            }
+        } else {
+            // Handle the case where selectedBook or its id is nil
+            print("selectedBook or bookId is nil")
+        }
+    }
             
     
     var filteredBooks: [BookItem] {

@@ -1,36 +1,49 @@
 //
-//  ToReadViewModel.swift
+//  ReadViewModel.swift
 //  Final-Project
 //
-//  Created by Jacqueline Diaz de Leon on 09/09/24.
+//  Created by Jacqueline Diaz de Leon on 04/09/24.
 //
 
 import SwiftUI
+import Combine
 
-final class ToReadViewModel: ObservableObject {
-    @Published var toReadBooks: [BookItem] = []
+
+final class ReadViewModel: ObservableObject {
+    @Published var readBooks: [BookItem] = []
     @Published var alertItem: AlertItem?
     @Published var isSelected: Bool = false
     
-    private var booksManager = BooksManager.shared
     
-    func getToReadBooksIDs() {
-        booksManager.fetchBooksIDs(from: "toRead") { [weak self] bookIDs in
+    
+    @MainActor
+    
+    
+    func getReadBooksIDs() {
+        BooksManager.shared.fetchBooksWithTimestamps(from: "read") { [weak self] bookTimestamp in
             guard let self = self else { return }
-            self.getToReadBooks(booksIDs: bookIDs)
+            let sortedBooksIDs = bookTimestamp
+                .sorted(by: {$0.value > $1.value })
+                .map { $0.key }
+            self.getReadBooks(from: sortedBooksIDs)
         }
     }
     
-    func getToReadBooks(booksIDs: [String]) {
+    func getReadBooks(from bookIDs: [String]) {
         
         Task {
             do {
-                let fetchedBooks = try await NetworkManager.shared.getBooksByIDs(bookIDs: booksIDs)
+                let fetchedBooks = try await NetworkManager.shared.getBooksByIDs(bookIDs: bookIDs)
                 DispatchQueue.main.async {
-                    self.toReadBooks = fetchedBooks
+                    let sortedBooks = bookIDs.compactMap { id in
+                        fetchedBooks.first { book in
+                            book.id == id
+                        }
+                    }
+                    
+                    self.readBooks = fetchedBooks
                 }
-               
-            }  catch {
+            } catch {
                 DispatchQueue.main.async {
                     if let bookError = error as? BookError {
                         switch bookError {
@@ -51,5 +64,5 @@ final class ToReadViewModel: ObservableObject {
         }
         
     }
-    
 }
+

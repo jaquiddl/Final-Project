@@ -17,6 +17,11 @@ struct SearchView: View {
         
         NavigationStack {
             VStack {
+                Text ("Search")
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .font(.title)
+                    .fontWeight(.semibold)
+                    .padding(.horizontal)
                 SearchBar(searchTerm: $viewModel.searchTerm)
                     .onChange(of: viewModel.searchTerm) {
                         viewModel.getBooksWithDelay(query: viewModel.searchTerm, delay: 2)
@@ -27,7 +32,7 @@ struct SearchView: View {
                     SPSearchCell(bookItem: book)
                         .onTapGesture {
                             viewModel.selectedBook = book
-                            isShowingDetails = true
+                            viewModel.isShowingDetails = true
                         }
                 }
                 .padding(.bottom)
@@ -35,7 +40,7 @@ struct SearchView: View {
             .task { viewModel.getBooksWithDelay(query: viewModel.searchTerm, delay: 1) }
             
             .sheet(item: $viewModel.selectedBook) { selectedItem in
-                BookPreView(bookItem: selectedItem)
+                BookPreView(bookItem: selectedItem, viewModel: viewModel)
                     .presentationDetents([.large])
                     .presentationDragIndicator(.visible)
                 

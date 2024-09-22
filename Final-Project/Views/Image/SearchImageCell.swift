@@ -36,7 +36,7 @@ struct SearchImageCell: View {
                 }
             }
             .onAppear {
-                print("Loading image from URL: \(url)")
+                
             }
         } else {
             Color.clear // Handle case where URL is nil

@@ -24,6 +24,7 @@ struct VolumeInfo: Codable {
     let publisher: String?
     let publishedDate: String?
     let description: String?
+    let pageCount: Int?
     let industryIdentifiers: [IndustryIdentifier]?
     let imageLinks: ImageLinks?
 }
@@ -50,6 +51,7 @@ struct MockData {
                                               publisher: "TOR",
                                               publishedDate: "2020",
                                               description: "Never pray to the gods that answer after dark",
+                                              pageCount: 310,
                                               industryIdentifiers: [
                                                 IndustryIdentifier(type: "ISBN_10", identifier: "1234567890"),
                                                 IndustryIdentifier(type: "ISBN_13", identifier: "123-1234567890")
@@ -65,6 +67,7 @@ struct MockData {
                                               publisher: "Apple Books",
                                               publishedDate: "2023-01-01",
                                               description: "A comprehensive guide to Swift programming language.",
+                                                    pageCount: 310,
                                               industryIdentifiers: [
                                                 IndustryIdentifier(type: "ISBN_10", identifier: "1234567890"),
                                                 IndustryIdentifier(type: "ISBN_13", identifier: "123-1234567890")
@@ -80,6 +83,7 @@ struct MockData {
                                               publisher: "Rocco Ltd",
                                               publishedDate: "1994",
                                               description: "To realize one's destiny is a person's only obligation",
+                                                    pageCount: 310,
                                               industryIdentifiers: [
                                                 IndustryIdentifier(type: "ISBN_10", identifier: "978"),
                                                 IndustryIdentifier(type: "ISBN_13", identifier: "")

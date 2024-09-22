@@ -22,12 +22,14 @@ final class ProfileViewModel: ObservableObject {
         // Fetch book IDs for each category
         let dispatchGroup = DispatchGroup()
         
-        var readingBooksWithTimestamps: [String: Date] = [:]
+        var readingBooks: [String: ReadingData] = [:]
         
         dispatchGroup.enter()
-        booksManager.fetchBooksWithTimestamps(from: "reading") { [weak self] bookTimestamps in
+        booksManager.fetchReadingProgress() { [weak self ] readingProgress in
             DispatchQueue.main.async {
-                readingBooksWithTimestamps = bookTimestamps
+                if let readingProgress = readingProgress {
+                    readingBooks = readingProgress
+                }
                 dispatchGroup.leave()
             }
         }
@@ -50,7 +52,9 @@ final class ProfileViewModel: ObservableObject {
         
         dispatchGroup.notify(queue: .main) {
             
-            let sortedReadingBooks = readingBooksWithTimestamps.sorted { $0.value > $1.value }
+            let sortedReadingBooks = readingBooks.sorted {
+                $0.value.lastUpdate > $1.value.lastUpdate // Compare dates
+            }
             if let latestBook = sortedReadingBooks.first {
                 self.getReadingBook(bookID: latestBook.key)
             }
@@ -62,9 +66,10 @@ final class ProfileViewModel: ObservableObject {
     func getReadingBook(bookID: String) {
         Task {
             do {
-                let fetchedBooks = try await NetworkManager.shared.getBookByID(bookID: bookID)
+                let fetchedBook = try await NetworkManager.shared.getBookByID(bookID: bookID)
                 DispatchQueue.main.async {
-                    self.readingBook = fetchedBooks
+                    self.readingBook = fetchedBook
+                    print(self.readingBook?.volumeInfo.title)
                     self.updateCurrentReading()
                 }
                

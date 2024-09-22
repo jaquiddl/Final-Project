@@ -1,17 +1,19 @@
 //
-//  BookPreView.swift
+//  ProgressView.swift
 //  Final-Project
 //
-//  Created by Jacqueline Diaz de Leon on 31/07/24.
+//  Created by Jacqueline Diaz de Leon on 20/09/24.
 //
 
 import SwiftUI
 
-struct BookPreView: View {
+struct ProgressBookView: View {
     let bookItem: BookItem
     let screenWidth = UIScreen.main.bounds.width
     @State var selectedCategory: String = "Add book"
-    @ObservedObject var viewModel: SearchViewModel
+    let currentPage: Int
+    @ObservedObject var viewModel: ReadingViewModel
+
     
     
     var body: some View {
@@ -56,10 +58,9 @@ struct BookPreView: View {
                     .cornerRadius(20)
                     if selectedCategory == "reading" {
                         if let pageCount = bookItem.volumeInfo.pageCount {
-                            let percentage = (viewModel.currentPage / Double(pageCount)) * 100
-                            ProgressView(value: viewModel.currentPage, total: Double(pageCount)) {
+                            ProgressView(value: Float(currentPage), total: Float(pageCount)) {
                             } currentValueLabel: {
-                                Text(String(format: "%.0f%%", percentage)) // Display as an integer percentage (e.g., 50%)
+                                Text(String(format: "%.0f%%", viewModel.percentage)) // Display as an integer percentage (e.g., 50%)
                             }
                             .padding()
                             .tint(.brandPrimary)
@@ -76,14 +77,14 @@ struct BookPreView: View {
             }
             Divider()
                 .padding()
-            Text("Description")
-                .font(.title3)
-                .fontWeight(.semibold)
-                .padding(.bottom, 8)
-            Text(bookItem.volumeInfo.description ?? "")
-                .padding(.horizontal)
-                .font(.body)
-                .foregroundStyle(Color.secondary)
+//            Text("Description")
+//                .font(.title3)
+//                .fontWeight(.semibold)
+//                .padding(.bottom, 8)
+//            Text(bookItem.volumeInfo.description ?? "")
+//                .padding(.horizontal)
+//                .font(.body)
+//                .foregroundStyle(Color.secondary)
         }
     }
     private func updateCategory(to category: String) {
@@ -127,4 +128,5 @@ struct BookPreView: View {
 //#Preview {
 //    BookPreView(bookItem: MockData.mockBook1)
 //}
+
 

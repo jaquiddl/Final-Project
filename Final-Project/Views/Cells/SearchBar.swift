@@ -18,13 +18,13 @@ struct SearchBar: View {
                 .imageScale(.small)
                 .frame(width: 40, height: 40)
                 .foregroundColor(.secondary)
-            TextField("Search Books", text: $searchTerm)
+            TextField("Title, Author", text: $searchTerm)
                 .font(.system(size: 18))
                 .foregroundColor(.secondary)
         }
         .background(Color(.systemGray6))
         .cornerRadius(20)
-        .padding(.top, 20)
+        .padding(.top, 2)
         .padding(.horizontal)
     }
 }
