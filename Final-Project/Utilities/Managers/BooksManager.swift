@@ -304,4 +304,39 @@ class BooksManager {
         
     }
     
+    func fetchSingleReadignProgress(for bookID: String, completion: @escaping (ReadingData?) -> Void) {
+        guard let userRef = getUserRef() else {
+            completion(nil)
+            return
+        }
+        userRef.getDocument() { document, error in
+                if let document = document, document.exists {
+                    let data = document.data()
+                    
+                    if let readingProgress = data?["readingProgress"] as? [String: [String: Any ]] {
+                        // Check if the specific bookID exists in the readingProgress data
+                        if let progressData = readingProgress[bookID] {
+                            if let currentPage = progressData["currentPage"] as? Int,
+                               let lastUpdate = progressData["lastUpdate"] as? Timestamp {
+                                
+                                let readingData = ReadingData(
+                                    currentPage: currentPage,
+                                    lastUpdate: lastUpdate.dateValue())
+                                
+                                completion(readingData) // Return the reading data for the specific bookID
+                            } else {
+                                completion(nil) // No valid progress data for the specific bookID
+                            }
+                        } else {
+                            completion(nil) // bookID not found in readingProgress
+                        }
+                    } else {
+                        completion(nil) // No reading progress data
+                    }
+                } else {
+                    completion(nil) // Document doesn't exist or error occurred
+                }
+            }
+    }
+    
 }

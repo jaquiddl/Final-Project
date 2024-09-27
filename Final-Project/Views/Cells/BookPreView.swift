@@ -56,10 +56,9 @@ struct BookPreView: View {
                     .cornerRadius(20)
                     if selectedCategory == "reading" {
                         if let pageCount = bookItem.volumeInfo.pageCount {
-                            let percentage = (viewModel.currentPage / Double(pageCount)) * 100
-                            ProgressView(value: viewModel.currentPage, total: Double(pageCount)) {
+                            ProgressView(value: Float(viewModel.currentPage), total: Float(pageCount)) {
                             } currentValueLabel: {
-                                Text(String(format: "%.0f%%", percentage)) // Display as an integer percentage (e.g., 50%)
+                                Text(String(format: "%.0f%%", viewModel.percentage)) // Display as an integer percentage (e.g., 50%)
                             }
                             .padding()
                             .tint(.brandPrimary)

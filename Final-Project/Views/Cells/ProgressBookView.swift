@@ -30,7 +30,7 @@ struct ProgressBookView: View {
                     .font(.title2)
                     .multilineTextAlignment(.center)
                     .fontWeight(.semibold)
-                Text(bookItem.volumeInfo.authors?.joined(separator: ", ") ?? "")
+                Text("by \(bookItem.volumeInfo.authors?.joined(separator: ", ") ?? "")")
                     .fontWeight(.semibold)
                     .foregroundStyle(Color.secondary)
                     .padding(.bottom, 30)
@@ -56,21 +56,46 @@ struct ProgressBookView: View {
                     .background(Color.gray.opacity(0.1))
                     .foregroundStyle(Color.brandPrimary)
                     .cornerRadius(20)
-                    if selectedCategory == "reading" {
+//                    if selectedCategory == "reading" {
                         if let pageCount = bookItem.volumeInfo.pageCount {
                             ProgressView(value: Float(currentPage), total: Float(pageCount)) {
                             } currentValueLabel: {
-                                Text(String(format: "%.0f%%", viewModel.percentage)) // Display as an integer percentage (e.g., 50%)
+                                Text(String(format: "%.0f%%", viewModel.percentage))
+                                    .font(.title3)
+                                    .padding(.top, 7)// Display as an integer percentage (e.g., 50%)
                             }
                             .padding()
                             .tint(.brandPrimary)
+                            Text("\(currentPage) of \(pageCount) pages")
+                                .frame(width: screenWidth/2)
+                                .font(.system(size: 20))
+                                .fontWeight(.semibold)
+                                .foregroundStyle(Color(.pink))
                         }
+                                            
+                       
                         
-                        TextField("Update Progress", text: $viewModel.progress, onCommit: {
+                    HStack {
+                        Text("Update progress: ")
+                            .frame(maxWidth: .infinity)
+                            .font(.title3)
+                            .fontWeight(.semibold)
+                            
+                        TextField("Current Page", text: $viewModel.progress, onCommit: {
                             viewModel.updateProgress()
                         })
+                        .frame(width: screenWidth/3)
+                        .font(.system(size: 18)) // Font size and weight
+                        .foregroundColor(.pink) // Text color
+                        .padding()
+                        .background(Color.gray.opacity(0.1)) // Background color for the text
+                        .cornerRadius(20) // Rounded corners for the background
+                        .padding(.horizontal)
                     }
-                }
+                        
+                        
+                    }
+//                }
                 .onAppear {
                     fetchCategoryForBook()
                 }
@@ -125,8 +150,8 @@ struct ProgressBookView: View {
     
 }
 
-//#Preview {
-//    BookPreView(bookItem: MockData.mockBook1)
-//}
+#Preview {
+    ProgressBookView(bookItem: MockData.mockBook1, currentPage: 50, viewModel: ReadingViewModel())
+}
 
 

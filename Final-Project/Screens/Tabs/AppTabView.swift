@@ -52,7 +52,8 @@ struct AppTabView: View {
                                 Label("", systemImage: "person")
                             }
                     }
-                    .shadow(radius: 5) // Add shadow to give depth
+                    .shadow(radius: 5)
+                    .tint(Color.brandPrimary)// Add shadow to give depth
                     
                     
                     

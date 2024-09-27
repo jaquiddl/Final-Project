@@ -87,10 +87,10 @@ struct ProfileView: View {
                                     .foregroundColor(.brandPrimary)
                                 NavigationLink(destination: ReadingView()) {
                                     
-                                    Text(viewModel.currentReading != nil ? "Now reading: \(viewModel.currentReading!)" : "No current readings")
+                                    Text(viewModel.currentReading != nil ? "Now reading: \(viewModel.currentReading!)" : "No current readings No current readingsNo current readingsNo current readings")
                                         .font(.callout)
                                         .foregroundColor(.gray)
-                                    
+                                        .multilineTextAlignment(.leading)
                                 }
                                 
                             }
@@ -103,14 +103,39 @@ struct ProfileView: View {
                                           reviewed: "✏️ \(user.reviewed.count) reviewed")
                         HStack (spacing: 10){
                             Text("0 following")
+                                .frame(maxWidth: .infinity, alignment: .center)
+                                .frame(height: 35)
+                                .multilineTextAlignment(.center)
+                                .background(Color.gray.opacity(0.2))
+                                .clipShape(RoundedRectangle(cornerRadius: 20))
                                 .font(.callout)
                                 .foregroundColor(.gray)
                             Text("0 followers")
+                                .frame(maxWidth: .infinity, alignment: .center)
+                                .frame(height: 35)
+                                .multilineTextAlignment(.center)
+                                .background(Color.gray.opacity(0.2))
+                                .clipShape(RoundedRectangle(cornerRadius: 20))
                                 .font(.callout)
                                 .foregroundColor(.gray)
+                            Button {
+                                print("")
+                                
+                            } label: {
+                                Label("Follow", systemImage: "chevron.down")
+                                    .foregroundStyle(Color.white)
+                                    .fontWeight(.semibold)
+                                
+                            }
+                            .frame(maxWidth: .infinity, alignment: .center)
+                            .frame(height: 35)
+                            .multilineTextAlignment(.center)
+                            .background(Color.pink)
+                            .clipShape(RoundedRectangle(cornerRadius: 20))
+                            
                         }
                         .frame(maxWidth: .infinity, alignment: .leading)
-                        .padding(.leading)
+
                         Divider()
                             .background(Color.gray)
                         

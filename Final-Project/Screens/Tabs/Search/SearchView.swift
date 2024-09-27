@@ -33,11 +33,12 @@ struct SearchView: View {
                         .onTapGesture {
                             viewModel.selectedBook = book
                             viewModel.isShowingDetails = true
+                            viewModel.getReadingBooks()
                         }
                 }
                 .padding(.bottom)
             }
-            .task { viewModel.getBooksWithDelay(query: viewModel.searchTerm, delay: 1) }
+            .task { viewModel.getBooksWithDelay(query: viewModel.searchTerm, delay: 0.5) }
             
             .sheet(item: $viewModel.selectedBook) { selectedItem in
                 BookPreView(bookItem: selectedItem, viewModel: viewModel)

@@ -13,7 +13,7 @@ struct UserReadingsStack: View {
     var reviewed: String
     
     var body: some View {
-            HStack (spacing: 20){
+            HStack (spacing: 35){
                 NavigationLink(destination: ReadView()) {
                     
                     Text(read)
@@ -24,9 +24,6 @@ struct UserReadingsStack: View {
                     Text(toRead)
                     
                 }
-                
-                
-                
                 Button(action: {
                     // Action when the "reviewed" item is tapped
                     print("Reviewed tapped: \(reviewed)")

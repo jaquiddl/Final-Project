@@ -57,7 +57,7 @@ final class NetworkManager {
     func getBookByID(bookID: String) async throws -> BookItem {
         
         if let cachedBook = diskCache.getBook(forKey: bookID) {
-            
+            print(cachedBook)
             return cachedBook
         }
         let urlString = "\(NetworkManager.baseURL)/\(bookID)?key=\(NetworkManager.apiKey)"

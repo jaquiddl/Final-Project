@@ -23,6 +23,9 @@ final class ReadingViewModel: ObservableObject {
         guard let totalPages = selectedBook?.volumeInfo.pageCount, totalPages > 0 else {
             return 0.0 // Return 0% if no page count is available
         }
+        print(selectedBook)
+        print(currentPage)
+        print(totalPages)
         return (Double(currentPage) / Double(totalPages)) * 100
     }
 

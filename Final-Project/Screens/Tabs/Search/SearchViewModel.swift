@@ -6,7 +6,7 @@
 //
 
 import SwiftUI
-import Combine
+
 
 final class SearchViewModel: ObservableObject {
     @Published var books: [BookItem] = []
@@ -14,11 +14,34 @@ final class SearchViewModel: ObservableObject {
     @Published var searchTerm: String = ""
     @Published var selectedBook: BookItem?
     @Published var isShowingDetails: Bool = false
-    @Published var readingProgress: [String: ReadingData] = [:]
+    @Published var readingProgress: ReadingData?
     @Published var progress: String = ""
-    @Published var currentPage: Double = 0
+    @Published var currentPage: Int = 0
     
     private var delayTask: DispatchWorkItem?
+    
+    var percentage: Double {
+        guard let totalPages = selectedBook?.volumeInfo.pageCount, totalPages > 0 else {
+            return 0.0 // Return 0% if no page count is available
+        }
+        print(selectedBook)
+        print(currentPage)
+        print(totalPages)
+        return (Double(currentPage) / Double(totalPages)) * 100
+    }
+    
+    func getReadingBooks() {
+        
+        if let selectedBookID = self.selectedBook?.id {
+            BooksManager.shared.fetchSingleReadignProgress(for: selectedBookID) { readingProgress in
+                if let readingProgress = readingProgress {
+                    
+                    let currentPage = readingProgress.currentPage
+                    self.currentPage = currentPage
+                }
+            }
+        }
+    }
   
     func getBooksWithDelay(query: String, delay: TimeInterval) {
         
@@ -64,6 +87,7 @@ final class SearchViewModel: ObservableObject {
             // Try to convert progress (String) to Int
             if let currentPage = Int(progress) {
                 // Pass the converted Int to updateReadingProgress
+                self.currentPage = currentPage
                 BooksManager.shared.updateReadingProgress(for: bookId, currentPage: currentPage)
             } else {
                 // Handle the case where the conversion fails (e.g., invalid input)
