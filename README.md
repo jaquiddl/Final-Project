@@ -53,16 +53,22 @@ The app also allows users to track their reading progress, including the current
    - Welcome
      - **WelcomeView.swift:** UI that welcomes the user to the app with two buttons to select, sign up or log in. 
    - SignUp
-     - **SignUpView.swift:** Contains the UI with the email and password fields.
+     - **SignUpView.swift:** Contains the UI with the name, email and password fields.
        - When focused, displays a checkmark for valid emails or 'Invalid text' for incorrect formats.
        - When focused, displays green checkmarks as each password requirement is met. (e.g., has uppercase letter, lowercase letter, special        character, number, etc. )
      - **SignUpViewModel.swift:** Validates the user email and password formats.
        - Sets a timer that triggers whenever the email and password fields change, allowing SignUpView to display the right checkmarks. 
        - Validates the email format (e.g., validemail.com) with a string extension in **String+Ext.swift**.
-       - Validates the password format with boolean variables and a string extension. 
+       - Validates the password format with boolean variables and a string extension.
+       - Creates a new user through AuthViewModel.
    - LogIn
-     - **LogInView.swift:**
-     - **LogInViewModel.swift:**
+     - **LogInView.swift:** Contains the UI with the name and email fields.
+       - When focused, displays a checkmark for valid emails or 'Invalid text' for incorrect formats.
+       - Cheks if both email and password formats are valid.
+       - Checks for a successfull log in through AuthViewModel.
+     - **LogInViewModel.swift:** Validates the user email and password formats.
+       - Sets a timer that triggers whenever the email and password fields change, allowing LogInView to display the right checkmarks.
+       - Validates the email and password formats with string extensions and boolean variables
    - Tabs
      - **AppTabView.swift:** Main view that contains the tabView (home, search and profile).
      - Home
