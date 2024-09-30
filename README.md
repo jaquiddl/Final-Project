@@ -72,10 +72,13 @@ The app also allows users to track their reading progress, including the current
    - Tabs
      - **AppTabView.swift:** Main view that contains the tabView (home, search and profile).
      - Home
-       - **HomeView.swift:**
+       - **HomeView.swift:** Shows a list with the users posts.
      - Search
-       - **SearchView.swift:**
+       - **SearchView.swift:** Contains the UI for a search bar that displays a list of books based on the search query.
+         - The list shows each book information using a custom book cell view.
        - **SearchViewModel.swift:**
+         - Fetches books by calling the networkManager via getBooksWithDelay() with a delay, using the search query as input and storing the results in a @published variable.  
+         - Filters the books result through the computed property filteredBooks, which check for matches between the the search query and the book title title or author name. 
     - Profile
        - **ProfileView.swift:**
        - **ProfileViewModel.swift:**
