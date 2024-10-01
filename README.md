@@ -76,15 +76,25 @@ The app also allows users to track their reading progress, including the current
      - Search
        - **SearchView.swift:** Contains the UI for a search bar that displays a list of books based on the search query.
          - The list shows each book information using a custom book cell view.
-       - **SearchViewModel.swift:**
-         - Fetches books by calling the networkManager via getBooksWithDelay() with a delay, using the search query as input and storing the results in a @published variable.  
-         - Filters the books result through the computed property filteredBooks, which check for matches between the the search query and the book title title or author name. 
+       - **SearchViewModel.swift:** Performs the network calls, percentage calculations and upgrade the reading progress.
+         - Gets books information by calling the networkManager via getBooksWithDelay(), using the search query as input and storing the results in a @published variable. 
+         - Filters the books result through the computed property filteredBooks, which check for matches between the the search query and the book title or author name. 
     - Profile
-       - **ProfileView.swift:**
-       - **ProfileViewModel.swift:**
+       - **ProfileView.swift:** Displays the user's data including name, profile picture (or placeholder), current reading, total of read, to-read and reviewed books, the user's posts, and a settings button.
+         - The settings button presents a sheet in order to change the display to dark mode, manage notifications and log out.
+         - The totals for 'to-read', 'read' and 'reviewed' books are tappable, showing the corresponding lists by category
+         - The UI updates simultaneosly with changes from firebase. 
+       - **ProfileViewModel.swift:** Retrieves from firebase firestore the last reading booksID and performs the necessary network calls.
+         - Keeps the last reading book updated with the updateCurrentReading() func. 
+         - Gets the booksIDs from firebase firestore for each category in order to fetch the book title and count the items for the 'reading', 'to read' and 'read' categoríes, respectively. 
        - Profile Sections
          - Posts
+           - **PostsView.swift:** Displays the user's posts with a custom posts cell. (pending)
+           - **PostsViewModel.swif:t** Retrieves posts information. (pending)
          - To Read
+           - **ToReadView.swift:** Shows the to-Read books in a list.
+             -
+           - **ToReadViewModel.swift:**
          - Reading
          - Read
 
