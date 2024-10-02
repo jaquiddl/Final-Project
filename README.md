@@ -146,14 +146,22 @@ The app also allows users to track their reading progress, including the current
       - Failure: displays a gray color.
       - Default: displays a gray color for unexpected states.
   - Cells
-    - **SPSearchCell.swift:**
-    - **SearchBar.swift:**
-    - **BookPreView.swift:**
+    - **SPSearchCell.swift:** View that contains the structure of a list item in the search section.
+      - Arranges in a horizontal stack the book cover image, title, and author(s) if available.
+    - **SearchBar.swift:** View with the structure of a custom search bar.
+      - Takes as input a search term.
+      - Shows as placeholder 'title or author' to inform the user an example prompt.
+    - **BookPreView.swift:** Structures the book preview.
+      - Accepts a book item and uses a @State variable to track the selected category of the book.
+      - Declares a SearchViewModel instance to update the reading progress.
+      - Includes book data such as cover, title and author(s)
+      - Implements a dropdown menu to select the book status (to-read, reading or read).
+      - When the book is selected as 'reading', the UI shows a progress bar with the achieved percentage and a field for entering the current page number. 
+      - Dynamically fetches and updates the reading progress via viewModel.
     - **PostCell.swift:**
     - **SettingItem.switf:**
     - **ReadingBookPreview.swift:**
     - **ProgressBookView.swift:**
-    - 
   
         
              
