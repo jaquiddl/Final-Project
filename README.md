@@ -33,6 +33,9 @@ The app also allows users to track their reading progress, including the current
 * Google Books API
 * Disk cache
 
+### Architecture
+* MVVM
+
 ### App Structure
 
 1. Authentication
@@ -93,10 +96,67 @@ The app also allows users to track their reading progress, including the current
            - **PostsViewModel.swif:t** Retrieves posts information. (pending)
          - To Read
            - **ToReadView.swift:** Shows the to-Read books in a list.
-             -
-           - **ToReadViewModel.swift:**
+             - Uses a custom cell to show the book preview details.
+             - Implements an .onAppear modifier to get the books IDs through the view model. 
+           - **ToReadViewModel.swift:** Handles database and network calls.
+             - The getToReadBooksIDs() function retrieves the booksIDs array by calling the books manager, and executes the second function.
+             - Gets the 'to read' books from getToReadBook function, which takes as input the retrieved bookIDs array and calls the network manager.
+             - Stores the 'to Read' books on a published variable.
          - Reading
+           - **ReadingView.swift:** Shows the reading books in a list with its reading progress.
+             - Implements an .onAppear modifier that triggers the getBooksIDs function through the view model.
+             -	Zips the reading book items and current pages arrays to show a combined list.
+             - Uses a custom tappable cell to show the book details, including a progress bar for the user's reading progress.
+             - When a book is selected, a .sheet is presented with a detailed book information and a field to uptade the reading progress.   
+           - **ReadingViewModel.swift:** Handles database and network calls.
          - Read
+           - ** ReadView.swift:** Shows the read books in a list.
+             - Uses a custom cell to show the book preview details.
+             - Implements an .onAppear modifier to get the books IDs trough the view model.
+           - ** ReadViewModel.swift:** Handles darabase and network calls.
+             - The getReadBooksIDs() function retrieves the booksIDs array by calling the books manager, and executes the second function.
+             - Gets the 'read' books from getReadBook function, which takes as input the retrieved bookIDs array and calls the network manager.
+             - Stores the 'read' books on a published variable.
+4. Model
+      - **User.swift:** Contains the representation of user data.
+        - Inlcudes the user struct used with firebase firestore.
+        - Conforms to the Identifiable protocol to differentiate between other users.
+        - Conforms to the Codable protocol to enconde and decode from firebase firestore. 
+      - **Book.swift:** Contains the representation of book data and a mock data struct for testing purposes.
+        - Includes a nested book stuct that matches the JSON structure from Google Books API
+        - Conforms to the Identifiable protocol to differentiate between books.
+        - Conforms to the Codable protocol for decoding data from the Google Books API.
+        - Caintains a mock data struct with three different mock books for testing purposes.
+      - **Post.swift:** Contains the post item with its properties. (pending)
+        - The view consists of mock data for testing purposes.
+5. Views
+   - This group includes various files which its main functionality is reusability, including cells, buttons, placeholders, and other UI components.
+   - CheckMarks
+     - **PasswordCheckMarks.swift:** View that represents the password validation requirements usign text checkmarks.
+       - Accepts five boolean variables indicating whether specific requirements are met (uppercase letter, lowercase letter, digit, special character and minimum lenght).
+       - Displays the text in green when the rule is met or the default color if not.
+       - Arranges the rules in a vertical stack. 
+     - **EmailCheckMark:** View that represents the email validation usign a text checkmark.
+       - Accepts a boolean variable indiciating whether the email structure is correct or not.
+       - Displays 'Valid email' in green when the condition is met or 'Invalid email' in the default color if not.
+  - Image
+    - **SearchImageCell.swift:** View that displays a book cover image fetched from a remote URL using AsyncImage. The implementation handles four possible loading states:
+      - Empty: displays a secondary placeholder color (image still loading).
+      - Success: displays the book cover image.
+      - Failure: displays a gray color.
+      - Default: displays a gray color for unexpected states.
+  - Cells
+    - **SPSearchCell.swift:**
+    - **SearchBar.swift:**
+    - **BookPreView.swift:**
+    - **PostCell.swift:**
+    - **SettingItem.switf:**
+    - **ReadingBookPreview.swift:**
+    - **ProgressBookView.swift:**
+    - 
+  
+        
+             
 
 
 
