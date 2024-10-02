@@ -151,17 +151,24 @@ The app also allows users to track their reading progress, including the current
     - **SearchBar.swift:** View with the structure of a custom search bar.
       - Takes as input a search term.
       - Shows as placeholder 'title or author' to inform the user an example prompt.
-    - **BookPreView.swift:** Structures the book preview.
+    - **BookPreView.swift:** Structures the book preview and dynamically fetches and updates the reading progress via view model.
       - Accepts a book item and uses a @State variable to track the selected category of the book.
       - Declares a SearchViewModel instance to update the reading progress.
       - Includes book data such as cover, title and author(s)
       - Implements a dropdown menu to select the book status (to-read, reading or read).
       - When the book is selected as 'reading', the UI shows a progress bar with the achieved percentage and a field for entering the current page number. 
-      - Dynamically fetches and updates the reading progress via viewModel.
-    - **PostCell.swift:**
-    - **SettingItem.switf:**
-    - **ReadingBookPreview.swift:**
-    - **ProgressBookView.swift:**
+    - **PostCell.swift:** View that displays the text post, its timestamp and users profile. The layout is organized in horizontal and vertical stacks.
+    - **SettingItem.switf:** View implemented in the setting sheet to present each label with its system image.
+      - Accepts parameters for the system image name, label text, and a boolean that indicates whether the setting is toggleable.
+    - **ReadingBookPreview.swift:** Cell used in the reading list to present each book's title, author and progress bar indicating the reading progress.
+  - Input Fields
+    - **InputView.swift:** View used for the email and password fields, ensuring a uniform design. It accepts a boolean variable that indicates whether the field is secure (for password entry) or not.
+  - Buttons
+    - **WelcomeButton.swift:** Contains five different types of custom buttons, including task buttons for asynchronous tasks, navigation links and regular buttons.
+  - **TitleAuthorStack.swift:** Refactored view that displays the book title and the author(s) name in a vertical stack for code organization and reusability.
+  - **ProfilePlaceholder.swift:** Refactored view that displays the profile picture placeholder.
+  - **UserReadingsStack.swift:** Refactored view that presents the horizontal stack showing the count of books in each category within the user's profile.
+   
   
         
              
