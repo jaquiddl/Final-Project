@@ -1,6 +1,6 @@
-## PLOT ##
-iOS app designed to help users fetch book information by title or author, manage personal libraries, and categorize books into specific lists: to read, reading, and read.
-The app also allows users to track their reading progress, including the current page they're on for each book.
+# PLOT 
+#### Video Demo: <https://youtu.be/RMYs5MMCkEw>
+#### Description: iOS app designed to help users fetch book information by title or author, manage personal libraries, and categorize books into specific lists: to read, reading, and read. The app also allows users to track their reading progress, including the current page they're on for each book.
 
 
 <p align="center">
